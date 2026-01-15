@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Artist | Glass Portfolio Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- BASE RESET & FONT --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0118;
+            color: white;
+            overflow-x: hidden;
+            line-height: 1.6;
+            padding-bottom: 50px; /* Spazio per il footer */
+        }
+
+        /* --- SFONDO DINAMICO (BLOBS) --- */
+        .bg-blobs {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; background: #0a0118; overflow: hidden;
+        }
+        .blob {
+            position: absolute; width: 600px; height: 600px;
+            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+            filter: blur(100px); border-radius: 50%; opacity: 0.15;
+            animation: move 25s infinite alternate;
+        }
+        @keyframes move {
+            from { transform: translate(-20%, -20%); }
+            to { transform: translate(110%, 60%); }
+        }
+
+        /* --- NAVBAR GLASS --- */
+        .navbar {
+            position: fixed; top: 25px; left: 50%; transform: translateX(-50%);
+            width: 95%; max-width: 1100px; padding: 12px 35px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            display: grid; grid-template-columns: 1fr auto 1fr;
+            align-items: center; z-index: 2000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .logo { 
+            font-weight: 900; font-size: 1.2rem; color: #fff; 
+            cursor: pointer; letter-spacing: 1px; justify-self: start;
+        }
+
+        .nav-links { display: flex; gap: 40px; align-items: center; justify-self: center; }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.6); text-decoration: none; 
+            font-size: 0.8rem; font-weight: 600; text-transform: uppercase; 
+            letter-spacing: 1.5px; cursor: pointer; transition: all 0.3s ease;
+            position: relative; padding: 5px 0;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: #3b82f6; transition: width 0.3s ease;
+        }
+        .nav-links a:hover { color: white; }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-right { justify-self: end; display: flex; align-items: center; }
+
+        .lang-switch {
+            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+            color: white; padding: 6px 12px; border-radius: 50px;
+            font-size: 0.75rem; font-weight: bold; cursor: pointer; outline: none; transition: 0.3s;
+        }
+        .lang-switch:hover { background: rgba(255,255,255,0.15); border-color: #3b82f6; }
+        .lang-switch option { background: #0a0118; color: white; }
+
+        /* --- COMPONENTI UI --- */
+        .btn {
+            padding: 15px 40px; border-radius: 50px; border: none;
+            background: linear-gradient(90deg, #3b82f6, #a855f7);
+            color: white; font-weight: bold; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4);
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(59, 130, 246, 0.6); }
+        
+        .btn-outline { background: transparent; border: 1px solid #3b82f6; margin-top: 20px; box-shadow: none; }
+        .btn-outline:hover { background: rgba(59, 130, 246, 0.1); }
+
+        .section-title {
+            text-align: center; font-size: 2.5rem; margin-bottom: 50px; 
+            position: relative; display: inline-block; left: 50%; transform: translateX(-50%);
+        }
+        .section-title::after {
+            content: ''; display: block; width: 60px; height: 4px; background: #3b82f6; margin: 10px auto 0; border-radius: 2px;
+        }
+
+        /* --- GESTIONE PAGINE --- */
+        .page { display: none; padding-top: 130px; animation: slideUp 0.6s ease-out forwards; min-height: 80vh; }
+        .page.active { display: block; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HOME SECTION --- */
+        .hero { height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .hero h1 { font-size: clamp(2.5rem, 8vw, 5.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 20px; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px;
+            padding: 60px; margin: 40px auto; max-width: 1100px;
+            display: grid; grid-template-columns: 1fr 1.5fr; gap: 50px; align-items: center;
+        }
+        .about-img { 
+            width: 100%; aspect-ratio: 1; border-radius: 20px; 
+            background: url('https://via.placeholder.com/600x600/3b82f6/ffffff?text=Your+Photo') center/cover; 
+            border: 1px solid rgba(255,255,255,0.2); 
+        }
+
+        /* --- PORTFOLIO SECTION --- */
+        .portfolio-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        }
+        .project-card {
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px; overflow: hidden; position: relative; cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); height: 350px;
+        }
+        .project-card:hover {
+            transform: translateY(-10px); border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        .project-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .project-card:hover .project-img { transform: scale(1.1); }
+        
+        .project-info {
+            position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px;
+            background: linear-gradient(to top, rgba(10,1,24,0.95), transparent);
+            transform: translateY(100px); transition: 0.4s ease;
+            display: flex; flex-direction: column; justify-content: flex-end;
+        }
+        .project-card:hover .project-info { transform: translateY(0); }
+        .project-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 5px; }
+        .project-tags { font-size: 0.8rem; color: #3b82f6; font-weight: 600; }
+
+        /* --- CONTACT SECTION --- */
+        .contact-container {
+            max-width: 1100px; margin: 0 auto; padding: 0 20px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px;
+        }
+        .contact-info h3 { font-size: 1.8rem; margin-bottom: 20px; }
+        .contact-info p { margin-bottom: 15px; color: rgba(255,255,255,0.7); }
+        
+        .glass-form {
+            background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px);
+            padding: 40px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-input {
+            width: 100%; padding: 15px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+            color: white; font-family: 'Poppins', sans-serif; transition: 0.3s;
+        }
+        .form-input:focus {
+            outline: none; border-color: #3b82f6; background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
+        }
+        textarea.form-input { resize: vertical; min-height: 120px; }
+
+        .social-links { margin-top: 30px; display: flex; gap: 20px; }
+        .social-btn {
+            width: 50px; height: 50px; border-radius: 50%;
+            background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; 
+            cursor: pointer; text-decoration: none; color: white; font-weight: bold;
+        }
+        .social-btn:hover { background: #3b82f6; border-color: #3b82f6; transform: translateY(-5px); }
+
+        /* --- LIGHTBOX --- */
+        .lightbox {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 3000;
+            display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s; padding: 20px;
+        }
+        .lightbox.active { opacity: 1; }
+        .lightbox img { max-width: 90%; max-height: 90%; border-radius: 10px; box-shadow: 0 0 50px rgba(59, 130, 246, 0.3); }
+        .close-lightbox {
+            position: absolute; top: 30px; right: 40px; color: white; 
+            font-size: 3rem; cursor: pointer; transition: 0.3s;
+        }
+        .close-lightbox:hover { color: #3b82f6; transform: rotate(90deg); }
+
+        /* --- FOOTER & MOBILE --- */
+        footer { text-align: center; padding: 40px; color: rgba(255,255,255,0.4); font-size: 0.9rem; margin-top: 50px; }
+
+        @media (max-width: 900px) {
+            .navbar { grid-template-columns: 1fr 1fr; padding: 10px 20px; }
+            .nav-links { display: none; } /* Nota: Per un menu mobile completo servirebbe un hamburger menu JS */
+            .glass-card, .contact-container { grid-template-columns: 1fr; text-align: center; }
+            .about-img { margin-bottom: 20px; }
+            .project-info { transform: translateY(0); background: linear-gradient(to top, rgba(10,1,24,1), transparent); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SFONDO ANIMATO -->
+    <div class="bg-blobs">
+        <div class="blob"></div>
+        <div class="blob" style="top: 50%; left: 70%; background: #3b82f6;"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="logo" onclick="showPage('home')">3D.PRO</div>
+        
+        <div class="nav-links">
+            <a onclick="showPage('home')" data-lang="nav_home">Home</a>
+            <a onclick="showPage('works')" data-lang="nav_portfolio">Portfolio</a>
+            <a onclick="showPage('contact')" data-lang="nav_contact">Contatti</a>
+        </div>
+
+        <div class="nav-right">
+            <select class="lang-switch" onchange="changeLanguage(this.value)">
+                <option value="it">IT</option>
+                <option value="en">EN</option>
+                <option value="es">ES</option>
+                <option value="fr">FR</option>
+            </select>
+        </div>
+    </nav>
+
+    <!-- PAGE: HOME -->
+    <div id="home" class="page active">
+        <section class="hero">
+            <p style="color: #3b82f6; letter-spacing: 3px; font-size: 0.8rem; margin-bottom: 10px;" data-lang="hero_tag">CREATIVE 3D ARTIST</p>
+            <h1 data-lang="hero_title">Scolpire l'Immaginazione.</h1>
+            <button class="btn" style="margin-top: 30px;" onclick="showPage('works')" data-lang="btn_explore">Esplora Lavori</button>
+        </section>
+
+        <section class="glass-card">
+            <div class="about-img"></div>
+            <div class="about-content">
+                <h2 style="font-size: 2.5rem; margin-bottom: 15px;" data-lang="about_title">Ciao, sono [Tuo Nome]</h2>
+                <p data-lang="about_desc">Appassionato di 3D Generalist con oltre 5 anni di esperienza nel settore del rendering fotorealistico. Il mio obiettivo è trasformare concetti complessi in asset visivi mozzafiato.</p>
+                <p style="margin-top: 15px; color: rgba(255,255,255,0.6);" data-lang="about_spec">Specializzato in: Blender, ZBrush, Substance Painter e Unreal Engine 5.</p>
+                <button class="btn btn-outline" onclick="showPage('contact')" data-lang="btn_collab">Lavoriamo Insieme</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE: PORTFOLIO -->
+    <div id="works" class="page">
+        <h2 class="section-title" data-lang="port_title">Ultimi Progetti</h2>
+        
+        <div class="portfolio-grid">
+            <!-- Progetto 1 -->
+            <div class="project-card" onclick="openLightbox('https://via.placeholder.com/1200x800/1a1a2e/3b82f6?text=Cyberpunk+City')">
+                <img src="https://via.placeholder.com/600x400/1a1a2e/3b82f6?text=Cyberpunk+City" alt="Project 1" class="project-img">
+                <div class="project-info">
+                    <div class="project-title">Cyberpunk City</div>
+                    <div class="project-tags">Blender • Cycles • Photoshop</div>
+                </div>
+            </div>
+
+            <!-- Progetto 2 -->
+            <div class="project-card" onclick="openLightbox('https://via.placeholder.com/1200x800/2e1a2e/a855f7?text=Character+Sculpt')">
+                <img src="https://via.placeholder.com/600x400/2e1a2e/a855f7?text=Character+Sculpt" alt="Project 2" class="project-img">
+                <div class="project-info">
+                    <div class="project-title">Character Design</div>
+                    <div class="project-tags">ZBrush • Substance • UE5</div>
+                </div>
+            </div>
+
+            <!-- Progetto 3 -->
+            <div class="project-card" onclick="openLightbox('https://via.placeholder.com/1200x800/0a2e1a/55f7a8?text=Product+Visualization')">
+                <img src="https://via.placeholder.com/600x400/0a2e1a/55f7a8?text=Product+Visualization" alt="Project 3" class="project-img">
+                <div class="project-info">
+                    <div class="project-title">Luxury Watch</div>
+                    <div class="project-tags">Cinema 4D • Octane</div>
+                </div>
+            </div>
+
+            <!-- Progetto 4 -->
+            <div class="project-card" onclick="openLightbox('https://via.placeholder.com/1200x800/2e2e0a/f7f755?text=Abstract+Art')">
+                <img src="https://via.placeholder.com/600x400/2e2e0a/f7f755?text=Abstract+Art" alt="Project 4" class="project-img">
+                <div class="project-info">
+                    <div class="project-title">Fluid Simulation</div>
+                    <div class="project-tags">Houdini • Redshift</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE: CONTACT -->
+    <div id="contact" class="page">
+        <h2 class="section-title" data-lang="contact_title">Parliamo del tuo Progetto</h2>
+        
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3 data-lang="contact_sub">Mettiamoci in contatto</h3>
+                <p data-lang="contact_text">Hai un'idea in mente o hai bisogno di un modello 3D? Scrivimi e trasformiamo la tua visione in realtà.</p>
+                
+                <p style="margin-top: 30px;">Email: <strong style="color: #3b82f6;">contact@yourportfolio.com</strong></p>
+                <p>Location: <strong style="color: #3b82f6;">Milan, Italy (Remote Available)</strong></p>
+
+                <div class="social-links">
+                    <a href="#" class="social-btn">IG</a>
+                    <a href="#" class="social-btn">AS</a> <!-- ArtStation -->
+                    <a href="#" class="social-btn">IN</a> <!-- LinkedIn -->
+                </div>
+            </div>
+
+            <form class="glass-form" onsubmit="event.preventDefault(); alert('Messaggio Inviato! (Demo)');">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Il tuo nome" data-lang="form_name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="La tua email" data-lang="form_email" required>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-input" placeholder="Descrivi il tuo progetto..." data-lang="form_msg" required></textarea>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;" data-lang="btn_send">Invia Messaggio</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 3D.PRO Portfolio. All rights reserved.
+    </footer>
+
+    <!-- LIGHTBOX (Zoom Immagini) -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <span class="close-lightbox">&times;</span>
+        <img id="lightbox-img" src="" alt="Full Render">
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- 1. NAVIGAZIONE (SPA) ---
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+                p.style.display = 'none';
+            });
+            const activePage = document.getElementById(id);
+            activePage.style.display = 'block';
+            setTimeout(() => { activePage.classList.add('active'); }, 10);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- 2. LIGHTBOX ---
+        function openLightbox(src) {
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            img.src = src;
+            lightbox.style.display = 'flex';
+            setTimeout(() => lightbox.classList.add('active'), 10);
+        }
+
+        function closeLightbox(e) {
+            if(e.target !== document.getElementById('lightbox-img')) {
+                const lightbox = document.getElementById('lightbox');
+                lightbox.classList.remove('active');
+                setTimeout(() => lightbox.style.display = 'none', 300);
+            }
+        }
+
+        // --- 3. TRADUZIONI ---
+        const translations = {
+            it: { 
+                nav_home: "Home", nav_portfolio: "Portfolio", nav_contact: "Contatti", 
+                hero_tag: "CREATIVE 3D ARTIST", hero_title: "Scolpire l'Immaginazione.", btn_explore: "Esplora Lavori", 
+                about_title: "Ciao, sono [Tuo Nome]", about_desc: "Appassionato di 3D Generalist con oltre 5 anni di esperienza nel settore del rendering fotorealistico. Il mio obiettivo è trasformare concetti complessi in asset visivi mozzafiato.", about_spec: "Specializzato in: Blender, ZBrush, Substance Painter e Unreal Engine 5.", btn_collab: "Lavoriamo Insieme",
+                port_title: "Ultimi Progetti", contact_title: "Parliamo del tuo Progetto", contact_sub: "Mettiamoci in contatto",
+                contact_text: "Hai un'idea in mente o hai bisogno di un modello 3D? Scrivimi e trasformiamo la tua visione in realtà.", 
+                form_name: "Il tuo nome", form_email: "La tua email", form_msg: "Descrivi il tuo progetto...", btn_send: "Invia Messaggio"
+            },
+            en: { 
+                nav_home: "Home", nav_portfolio: "Portfolio", nav_contact: "Contact", 
+                hero_tag: "CREATIVE 3D ARTIST", hero_title: "Sculpting Imagination.", btn_explore: "Explore Works", 
+                about_title: "Hi, I'm [Your Name]", about_desc: "Passionate 3D Generalist with over 5 years of experience in photorealistic rendering. My goal is to transform complex concepts into breathtaking visual assets.", about_spec: "Specialized in: Blender, ZBrush, Substance Painter, and Unreal Engine 5.", btn_collab: "Work Together",
+                port_title: "Latest Projects", contact_title: "Let's Talk Projects", contact_sub: "Get in Touch",
+                contact_text: "Have an idea in mind or need a 3D model? Text me and let's turn your vision into reality.", 
+                form_name: "Your Name", form_email: "Your Email", form_msg: "Describe your project...", btn_send: "Send Message"
+            },
+            es: { 
+                nav_home: "Inicio", nav_portfolio: "Portafolio", nav_contact: "Contacto", 
+                hero_tag: "ARTISTA 3D CREATIVO", hero_title: "Esculpiendo la Imaginación.", btn_explore: "Explorar Trabajos", 
+                about_title: "Hola, soy [Tu Nombre]", about_desc: "Generalista 3D apasionado con más de 5 años de experiencia en renderizado fotorrealista. Mi objetivo es transformar conceptos complejos en activos visuales impresionantes.", about_spec: "Especializado en: Blender, ZBrush, Substance Painter y Unreal Engine 5.", btn_collab: "Trabajemos Juntos",
+                port_title: "Últimos Proyectos", contact_title: "Hablemos de tu Proyecto", contact_sub: "Ponte en contacto",
+                contact_text: "¿Tienes una idea o necesitas un modelo 3D? Escríbeme y hagamos realidad tu visión.", 
+                form_name: "Tu Nombre", form_email: "Tu Correo", form_msg: "Describe tu proyecto...", btn_send: "Enviar Mensaje"
+            },
+            fr: { 
+                nav_home: "Accueil", nav_portfolio: "Portfolio", nav_contact: "Contact", 
+                hero_tag: "ARTISTE 3D CRÉATIF", hero_title: "Sculpter l'Imagination.", btn_explore: "Explorer les Travaux", 
+                about_title: "Salut, je suis [Ton Nom]", about_desc: "Généraliste 3D passionné avec plus de 5 ans d'expérience dans le rendu photoréaliste. Mon objectif est de transformer des concepts complexes en visuels époustouflants.", about_spec: "Spécialisé en : Blender, ZBrush, Substance Painter et Unreal Engine 5.", btn_collab: "Travaillons Ensemble",
+                port_title: "Derniers Projets", contact_title: "Parlons de votre Projet", contact_sub: "Restons en contact",
+                contact_text: "Vous avez une idée ou besoin d'un modèle 3D ? Écrivez-moi et transformons votre vision en réalité.", 
+                form_name: "Votre Nom", form_email: "Votre Email", form_msg: "Décrivez votre projet...", btn_send: "Envoyer Message"
+            }
+        };
+
+        function changeLanguage(lang) {
+            document.querySelectorAll('[data-lang]').forEach(element => {
+                const key = element.getAttribute('data-lang');
+                if(translations[lang][key]) {
+                    // Se è un input, cambia il placeholder, altrimenti il testo
+                    if(element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.innerText = translations[lang][key];
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
