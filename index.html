@@ -76,6 +76,25 @@
         .lang-switch:hover { background: rgba(255,255,255,0.15); border-color: #3b82f6; }
         .lang-switch option { background: #0a0118; color: white; }
 
+        /* --- HAMBURGER MENU --- */
+        .hamburger {
+            display: none; flex-direction: column; cursor: pointer; z-index: 2001;
+            gap: 6px; padding: 8px 0;
+        }
+        .ham-line {
+            width: 25px; height: 3px; background: white; border-radius: 2px;
+            transition: 0.3s; transform-origin: center;
+        }
+        .hamburger.active .ham-line:nth-child(1) {
+            transform: rotate(45deg) translate(10px, 10px);
+        }
+        .hamburger.active .ham-line:nth-child(2) {
+            opacity: 0;
+        }
+        .hamburger.active .ham-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
         /* --- COMPONENTI UI --- */
         .btn {
             padding: 15px 40px; border-radius: 50px; border: none;
@@ -88,6 +107,38 @@
         
         .btn-outline { background: transparent; border: 1px solid #3b82f6; margin-top: 20px; box-shadow: none; }
         .btn-outline:hover { background: rgba(59, 130, 246, 0.1); }
+
+        /* --- SCROLL REVEAL ANIMATIONS --- */
+        .scroll-reveal {
+            opacity: 0; transform: translateY(30px);
+        }
+        .scroll-reveal.visible {
+            opacity: 1; transform: translateY(0);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        /* --- FORM VALIDATION STYLES --- */
+        .form-input.error {
+            border-color: #ef4444; background: rgba(239, 68, 68, 0.1);
+        }
+        .form-input.success {
+            border-color: #10b981; background: rgba(16, 185, 129, 0.1);
+        }
+        .form-message {
+            font-size: 0.8rem; margin-top: 5px; display: none; font-weight: 600;
+        }
+        .form-message.error { color: #ef4444; display: block; }
+        .form-message.success { color: #10b981; display: block; }
+        .form-feedback {
+            padding: 15px; border-radius: 10px; margin-bottom: 20px; display: none;
+            font-weight: 600; text-align: center; animation: slideUp 0.3s ease-out;
+        }
+        .form-feedback.success {
+            background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; display: block;
+        }
+        .form-feedback.error {
+            background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; display: block;
+        }
 
         .section-title {
             text-align: center; font-size: 2.5rem; margin-bottom: 50px; 
@@ -200,8 +251,17 @@
         footer { text-align: center; padding: 40px; color: rgba(255,255,255,0.4); font-size: 0.9rem; margin-top: 50px; }
 
         @media (max-width: 900px) {
-            .navbar { grid-template-columns: 1fr 1fr; padding: 10px 20px; }
-            .nav-links { display: none; } /* Nota: Per un menu mobile completo servirebbe un hamburger menu JS */
+            .hamburger { display: flex; }
+            .navbar { grid-template-columns: 1fr; padding: 10px 20px; }
+            .nav-links { 
+                position: fixed; top: 70px; left: 0; width: 100%; flex-direction: column;
+                background: rgba(10, 1, 24, 0.98); backdrop-filter: blur(25px);
+                padding: 30px 20px; display: none; gap: 20px; z-index: 1999;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+            .nav-links.active { display: flex; }
+            .nav-links a { font-size: 1rem; padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+            .nav-right { margin-top: 15px; }
             .glass-card, .contact-container { grid-template-columns: 1fr; text-align: center; }
             .about-img { margin-bottom: 20px; }
             .project-info { transform: translateY(0); background: linear-gradient(to top, rgba(10,1,24,1), transparent); }
@@ -226,7 +286,13 @@
     <nav class="navbar">
         <div class="logo" onclick="showPage('home')">3D.PRO</div>
         
-        <div class="nav-links">
+        <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+        </div>
+        
+        <div class="nav-links" id="nav-links">
             <a onclick="showPage('home')" data-lang="nav_home">Home</a>
             <a onclick="showPage('works')" data-lang="nav_portfolio">Portfolio</a>
             <a onclick="showPage('contact')" data-lang="nav_contact">Contatti</a>
@@ -323,15 +389,20 @@
                 </div>
             </div>
 
-            <form class="glass-form" onsubmit="event.preventDefault(); alert('Messaggio Inviato! (Demo)');">
+            <form class="glass-form" id="contactForm" action="https://formsubmit.co/gabriele.bongiovanni23@gmail.com" method="POST">
+                <div id="formFeedback" class="form-feedback"></div>
+                
                 <div class="form-group">
-                    <input type="text" class="form-input" placeholder="Il tuo nome" data-lang="form_name" required>
+                    <input type="text" id="formName" name="name" class="form-input" placeholder="Il tuo nome" data-lang="form_name" required>
+                    <div class="form-message"></div>
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-input" placeholder="La tua email" data-lang="form_email" required>
+                    <input type="email" id="formEmail" name="email" class="form-input" placeholder="La tua email" data-lang="form_email" required>
+                    <div class="form-message"></div>
                 </div>
                 <div class="form-group">
-                    <textarea class="form-input" placeholder="Descrivi il tuo progetto..." data-lang="form_msg" required></textarea>
+                    <textarea id="formMsg" name="message" class="form-input" placeholder="Parlami di te" data-lang="form_msg" required></textarea>
+                    <div class="form-message"></div>
                 </div>
                 <button type="submit" class="btn" style="width: 100%;" data-lang="btn_send">Invia Messaggio</button>
             </form>
@@ -363,9 +434,52 @@
             activePage.style.display = 'block';
             setTimeout(() => { activePage.classList.add('active'); }, 10);
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            closeMobileMenu();
+            setTimeout(initScrollReveal, 100);
         }
 
-        // --- 2. LIGHTBOX ---
+        // --- 1B. HAMBURGER MENU MOBILE ---
+        function toggleMobileMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('nav-links');
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('nav-links');
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
+
+        // Chiudi menu quando clicchi su un link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // --- 2. SCROLL REVEAL ANIMATIONS ---
+        function initScrollReveal() {
+            const options = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, options);
+
+            document.querySelectorAll('.glass-card, .project-card, .contact-container, .section-title').forEach(el => {
+                el.classList.add('scroll-reveal');
+                observer.observe(el);
+            });
+        }
+
+        // --- 2B. LIGHTBOX ---
         function openLightbox(src) {
             const lightbox = document.getElementById('lightbox');
             const img = document.getElementById('lightbox-img');
@@ -390,8 +504,13 @@
                 about_title: "Ciao, sono Gabriele Bongiovanni", about_desc: "Appassionato di 3D nel settore del rendering, dell'animazione e della modellazione. Il mio obiettivo è trasformare assets statici in animati e creare assets da utilizzare", about_spec: "Specializzato in: Blender, ZBrush, Substance Painter e Unreal Engine 5.", btn_collab: "Lavoriamo Insieme",
                 port_title: "Ultimi Progetti", contact_title: "Parliamo del tuo Progetto", contact_sub: "Mettiamoci in contatto",
                 contact_text: "Hai un'idea in mente o hai bisogno di un modello 3D? Scrivimi e trasformiamo la tua visione in realtà.", 
-                form_name: "Il tuo nome", form_email: "La tua email", form_msg: "Descrivi il tuo progetto...", btn_send: "Invia Messaggio"
-                , work_in_progress: "Lavoro in corso"
+                form_name: "Il tuo nome", form_email: "La tua email", form_msg: "Parlami di te", btn_send: "Invia Messaggio",
+                work_in_progress: "Lavoro in corso",
+                err_name: "Nome deve avere almeno 2 caratteri",
+                err_email: "Email non valida",
+                err_msg: "Messaggio deve avere almeno 10 caratteri",
+                success_msg: "✓ Messaggio inviato con successo! Ti risponderò presto.",
+                error_submit: "✗ Controlla i campi e riprova"
             },
             en: { 
                 nav_home: "Home", nav_portfolio: "Portfolio", nav_contact: "Contact", 
@@ -399,8 +518,13 @@
                 about_title: "Hi, I'm Gabriele Bongiovanni", about_desc: "Passionate about 3D in the fields of rendering, animation and modeling. My goal is to transform static assets into animated ones and create assets ready for use.", about_spec: "Specialized in: Blender, ZBrush, Substance Painter, and Unreal Engine 5.", btn_collab: "Work Together",
                 port_title: "Latest Projects", contact_title: "Let's Talk Projects", contact_sub: "Get in Touch",
                 contact_text: "Have an idea in mind or need a 3D model? Text me and let's turn your vision into reality.", 
-                form_name: "Your Name", form_email: "Your Email", form_msg: "Describe your project...", btn_send: "Send Message"
-                , work_in_progress: "Work in progress"
+                form_name: "Your Name", form_email: "Your Email", form_msg: "Tell me about yourself", btn_send: "Send Message",
+                work_in_progress: "Work in progress",
+                err_name: "Name must be at least 2 characters",
+                err_email: "Invalid email",
+                err_msg: "Message must be at least 10 characters",
+                success_msg: "✓ Message sent successfully! I'll reply soon.",
+                error_submit: "✗ Please check the fields and try again"
             },
             es: { 
                 nav_home: "Inicio", nav_portfolio: "Portafolio", nav_contact: "Contacto", 
@@ -408,8 +532,13 @@
                 about_title: "Hola, soy Gabriele Bongiovanni", about_desc: "Apasionado por el 3D en los ámbitos del renderizado, la animación y el modelado. Mi objetivo es transformar assets estáticos en animados y crear assets listos para usar.", about_spec: "Especializado en: Blender, ZBrush, Substance Painter y Unreal Engine 5.", btn_collab: "Trabajemos Juntos",
                 port_title: "Últimos Proyectos", contact_title: "Hablemos de tu Proyecto", contact_sub: "Ponte en contacto",
                 contact_text: "¿Tienes una idea o necesitas un modelo 3D? Escríbeme y hagamos realidad tu visión.", 
-                form_name: "Tu Nombre", form_email: "Tu Correo", form_msg: "Describe tu proyecto...", btn_send: "Enviar Mensaje"
-                , work_in_progress: "Trabajo en curso"
+                form_name: "Tu Nombre", form_email: "Tu Correo", form_msg: "Cuéntame sobre ti", btn_send: "Enviar Mensaje",
+                work_in_progress: "Trabajo en curso",
+                err_name: "El nombre debe tener al menos 2 caracteres",
+                err_email: "Email inválido",
+                err_msg: "El mensaje debe tener al menos 10 caracteres",
+                success_msg: "✓ ¡Mensaje enviado con éxito! Pronto te responderé.",
+                error_submit: "✗ Por favor verifica los campos e intenta de nuevo"
             },
             fr: { 
                 nav_home: "Accueil", nav_portfolio: "Portfolio", nav_contact: "Contact", 
@@ -417,12 +546,21 @@
                 about_title: "Salut, je suis Gabriele Bongiovanni", about_desc: "Passionné par la 3D dans les domaines du rendu, de l'animation et de la modélisation. Mon objectif est de transformer des assets statiques en animés et de créer des assets prêts à l'emploi.", about_spec: "Spécialisé en : Blender, ZBrush, Substance Painter et Unreal Engine 5.", btn_collab: "Travaillons Ensemble",
                 port_title: "Derniers Projets", contact_title: "Parlons de votre Projet", contact_sub: "Restons en contact",
                 contact_text: "Vous avez une idée ou besoin d'un modèle 3D ? Écrivez-moi et transformons votre vision en réalité.", 
-                form_name: "Votre Nom", form_email: "Votre Email", form_msg: "Décrivez votre projet...", btn_send: "Envoyer Message"
-                , work_in_progress: "Travail en cours"
+                form_name: "Votre Nom", form_email: "Votre Email", form_msg: "Parlez-moi de vous", btn_send: "Envoyer Message",
+                work_in_progress: "Travail en cours",
+                err_name: "Le nom doit contenir au moins 2 caractères",
+                err_email: "Email invalide",
+                err_msg: "Le message doit contenir au moins 10 caractères",
+                success_msg: "✓ Message envoyé avec succès ! Je vous répondrai bientôt.",
+                error_submit: "✗ Veuillez vérifier les champs et réessayer"
             }
         };
 
+        // Lingua attuale
+        let currentLanguage = 'it';
+
         function changeLanguage(lang) {
+            currentLanguage = lang;
             document.querySelectorAll('[data-lang]').forEach(element => {
                 const key = element.getAttribute('data-lang');
                 if(translations[lang][key]) {
@@ -435,6 +573,87 @@
                 }
             });
         }
+
+        // --- 5. FORM VALIDATION ---
+        function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function validateForm() {
+            const name = document.getElementById('formName');
+            const email = document.getElementById('formEmail');
+            const msg = document.getElementById('formMsg');
+            let isValid = true;
+
+            // Validazione Nome
+            if(name.value.trim().length < 2) {
+                name.classList.add('error');
+                name.classList.remove('success');
+                name.nextElementSibling.textContent = translations[currentLanguage].err_name;
+                name.nextElementSibling.classList.add('error');
+                isValid = false;
+            } else {
+                name.classList.remove('error');
+                name.classList.add('success');
+                name.nextElementSibling.classList.remove('error');
+            }
+
+            // Validazione Email
+            if(!validateEmail(email.value)) {
+                email.classList.add('error');
+                email.classList.remove('success');
+                email.nextElementSibling.textContent = translations[currentLanguage].err_email;
+                email.nextElementSibling.classList.add('error');
+                isValid = false;
+            } else {
+                email.classList.remove('error');
+                email.classList.add('success');
+                email.nextElementSibling.classList.remove('error');
+            }
+
+            // Validazione Messaggio
+            if(msg.value.trim().length < 10) {
+                msg.classList.add('error');
+                msg.classList.remove('success');
+                msg.nextElementSibling.textContent = translations[currentLanguage].err_msg;
+                msg.nextElementSibling.classList.add('error');
+                isValid = false;
+            } else {
+                msg.classList.remove('error');
+                msg.classList.add('success');
+                msg.nextElementSibling.classList.remove('error');
+            }
+
+            return isValid;
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const feedback = document.getElementById('formFeedback');
+
+            if(validateForm()) {
+                // Form è valido, invia normalmente
+                document.getElementById('contactForm').submit();
+            } else {
+                feedback.textContent = translations[currentLanguage].error_submit;
+                feedback.classList.add('error');
+                feedback.classList.remove('success');
+            }
+        }
+
+        // Aggiungi validazione al submit del form
+        document.getElementById('contactForm') && document.getElementById('contactForm').addEventListener('submit', handleFormSubmit);
+
+        // Real-time validation
+        document.getElementById('contactForm') && document.getElementById('contactForm').addEventListener('input', (e) => {
+            if(e.target.classList.contains('form-input')) {
+                const feedback = e.target.nextElementSibling;
+                feedback.classList.remove('error');
+            }
+        });
+
+        // Inizializza scroll reveal al caricamento
+        window.addEventListener('DOMContentLoaded', initScrollReveal);
     </script>
 </body>
 </html>
