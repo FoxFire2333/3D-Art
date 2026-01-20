@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Artist | Gabriele Bongiovanni</title>
-    <meta name="google-site-verification" content="srcEC3JFs0q-xizkyjsrubAHdFvL7IrEUgUzsbjQHf4" />
+    <title>3D Artist | Glass Portfolio Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;900&display=swap" rel="stylesheet">
     <style>
         /* --- BASE RESET & FONT --- */
@@ -207,6 +206,12 @@
             .about-img { margin-bottom: 20px; }
             .project-info { transform: translateY(0); background: linear-gradient(to top, rgba(10,1,24,1), transparent); }
         }
+
+        /* --- WORK IN PROGRESS NOTICE --- */
+        .work-progress {
+            text-align: center; color: rgba(255,255,255,0.55); font-size: 1.1rem;
+            margin: 24px 0 12px; letter-spacing: 0.6px; font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -249,7 +254,7 @@
             <div class="about-img"></div>
             <div class="about-content">
                 <h2 style="font-size: 2.5rem; margin-bottom: 15px;" data-lang="about_title">Ciao, sono Gabriele Bongiovanni</h2>
-                <p data-lang="about_desc">Appassionato di 3D nel settore del rendering e dell'animazione. Il mio obiettivo è trasformare oggetti statici in animazioni e creare ambienti.</p>
+                <p data-lang="about_desc">Appassionato di 3D nel settore del rendering, dell'animazione e della modellazione. Il mio obiettivo è trasformare assets statici in animati e creare assets da utilizzare</p>
                 <p style="margin-top: 15px; color: rgba(255,255,255,0.6);" data-lang="about_spec">Specializzato in: Blender, ZBrush, Substance Painter e Unreal Engine 5.</p>
                 <button class="btn btn-outline" onclick="showPage('contact')" data-lang="btn_collab">Lavoriamo Insieme</button>
             </div>
@@ -337,6 +342,9 @@
         &copy; 2026 3D.PRO Portfolio. All rights reserved.
     </footer>
 
+    <!-- WORK IN PROGRESS NOTICE -->
+    <p class="work-progress" data-lang="work_in_progress">Lavoro in corso</p>
+
     <!-- LIGHTBOX (Zoom Immagini) -->
     <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
         <span class="close-lightbox">&times;</span>
@@ -379,34 +387,38 @@
             it: { 
                 nav_home: "Home", nav_portfolio: "Portfolio", nav_contact: "Contatti", 
                 hero_tag: "CREATIVE 3D ARTIST", hero_title: "Scolpire l'Immaginazione.", btn_explore: "Esplora Lavori", 
-                about_title: "Ciao, sono [Tuo Nome]", about_desc: "Appassionato di 3D Generalist con oltre 5 anni di esperienza nel settore del rendering fotorealistico. Il mio obiettivo è trasformare concetti complessi in asset visivi mozzafiato.", about_spec: "Specializzato in: Blender, ZBrush, Substance Painter e Unreal Engine 5.", btn_collab: "Lavoriamo Insieme",
+                about_title: "Ciao, sono Gabriele Bongiovanni", about_desc: "Appassionato di 3D nel settore del rendering, dell'animazione e della modellazione. Il mio obiettivo è trasformare assets statici in animati e creare assets da utilizzare", about_spec: "Specializzato in: Blender, ZBrush, Substance Painter e Unreal Engine 5.", btn_collab: "Lavoriamo Insieme",
                 port_title: "Ultimi Progetti", contact_title: "Parliamo del tuo Progetto", contact_sub: "Mettiamoci in contatto",
                 contact_text: "Hai un'idea in mente o hai bisogno di un modello 3D? Scrivimi e trasformiamo la tua visione in realtà.", 
                 form_name: "Il tuo nome", form_email: "La tua email", form_msg: "Descrivi il tuo progetto...", btn_send: "Invia Messaggio"
+                , work_in_progress: "Lavoro in corso"
             },
             en: { 
                 nav_home: "Home", nav_portfolio: "Portfolio", nav_contact: "Contact", 
                 hero_tag: "CREATIVE 3D ARTIST", hero_title: "Sculpting Imagination.", btn_explore: "Explore Works", 
-                about_title: "Hi, I'm [Your Name]", about_desc: "Passionate 3D Generalist with over 5 years of experience in photorealistic rendering. My goal is to transform complex concepts into breathtaking visual assets.", about_spec: "Specialized in: Blender, ZBrush, Substance Painter, and Unreal Engine 5.", btn_collab: "Work Together",
+                about_title: "Hi, I'm Gabriele Bongiovanni", about_desc: "Passionate about 3D in the fields of rendering, animation and modeling. My goal is to transform static assets into animated ones and create assets ready for use.", about_spec: "Specialized in: Blender, ZBrush, Substance Painter, and Unreal Engine 5.", btn_collab: "Work Together",
                 port_title: "Latest Projects", contact_title: "Let's Talk Projects", contact_sub: "Get in Touch",
                 contact_text: "Have an idea in mind or need a 3D model? Text me and let's turn your vision into reality.", 
                 form_name: "Your Name", form_email: "Your Email", form_msg: "Describe your project...", btn_send: "Send Message"
+                , work_in_progress: "Work in progress"
             },
             es: { 
                 nav_home: "Inicio", nav_portfolio: "Portafolio", nav_contact: "Contacto", 
                 hero_tag: "ARTISTA 3D CREATIVO", hero_title: "Esculpiendo la Imaginación.", btn_explore: "Explorar Trabajos", 
-                about_title: "Hola, soy [Tu Nombre]", about_desc: "Generalista 3D apasionado con más de 5 años de experiencia en renderizado fotorrealista. Mi objetivo es transformar conceptos complejos en activos visuales impresionantes.", about_spec: "Especializado en: Blender, ZBrush, Substance Painter y Unreal Engine 5.", btn_collab: "Trabajemos Juntos",
+                about_title: "Hola, soy Gabriele Bongiovanni", about_desc: "Apasionado por el 3D en los ámbitos del renderizado, la animación y el modelado. Mi objetivo es transformar assets estáticos en animados y crear assets listos para usar.", about_spec: "Especializado en: Blender, ZBrush, Substance Painter y Unreal Engine 5.", btn_collab: "Trabajemos Juntos",
                 port_title: "Últimos Proyectos", contact_title: "Hablemos de tu Proyecto", contact_sub: "Ponte en contacto",
                 contact_text: "¿Tienes una idea o necesitas un modelo 3D? Escríbeme y hagamos realidad tu visión.", 
                 form_name: "Tu Nombre", form_email: "Tu Correo", form_msg: "Describe tu proyecto...", btn_send: "Enviar Mensaje"
+                , work_in_progress: "Trabajo en curso"
             },
             fr: { 
                 nav_home: "Accueil", nav_portfolio: "Portfolio", nav_contact: "Contact", 
                 hero_tag: "ARTISTE 3D CRÉATIF", hero_title: "Sculpter l'Imagination.", btn_explore: "Explorer les Travaux", 
-                about_title: "Salut, je suis [Ton Nom]", about_desc: "Généraliste 3D passionné avec plus de 5 ans d'expérience dans le rendu photoréaliste. Mon objectif est de transformer des concepts complexes en visuels époustouflants.", about_spec: "Spécialisé en : Blender, ZBrush, Substance Painter et Unreal Engine 5.", btn_collab: "Travaillons Ensemble",
+                about_title: "Salut, je suis Gabriele Bongiovanni", about_desc: "Passionné par la 3D dans les domaines du rendu, de l'animation et de la modélisation. Mon objectif est de transformer des assets statiques en animés et de créer des assets prêts à l'emploi.", about_spec: "Spécialisé en : Blender, ZBrush, Substance Painter et Unreal Engine 5.", btn_collab: "Travaillons Ensemble",
                 port_title: "Derniers Projets", contact_title: "Parlons de votre Projet", contact_sub: "Restons en contact",
                 contact_text: "Vous avez une idée ou besoin d'un modèle 3D ? Écrivez-moi et transformons votre vision en réalité.", 
                 form_name: "Votre Nom", form_email: "Votre Email", form_msg: "Décrivez votre projet...", btn_send: "Envoyer Message"
+                , work_in_progress: "Travail en cours"
             }
         };
 
@@ -425,8 +437,4 @@
         }
     </script>
 </body>
-
 </html>
-
-
-
