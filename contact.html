@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Artist | Contatti</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/sections.css">
+</head>
+<body>
+
+    <!-- SFONDO ANIMATO -->
+    <div class="bg-blobs">
+        <div class="blob"></div>
+        <div class="blob" style="top: 50%; left: 70%; background: #3b82f6;"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a class="logo" href="index.html">3D.PRO</a>
+
+        <div class="hamburger" id="hamburger">
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+        </div>
+
+        <div class="nav-links" id="nav-links">
+            <a href="index.html" data-lang="nav_home">Home</a>
+            <a href="portfolio.html" data-lang="nav_portfolio">Portfolio</a>
+            <a href="contact.html" class="active" data-lang="nav_contact">Contatti</a>
+        </div>
+
+        <div class="nav-right">
+            <select class="lang-switch" onchange="changeLanguage(this.value)">
+                <option value="it">IT</option>
+                <option value="en">EN</option>
+                <option value="es">ES</option>
+                <option value="fr">FR</option>
+            </select>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="page active" id="contact">
+
+        <h2 class="section-title" data-lang="contact_title">Parliamo del tuo Progetto</h2>
+
+        <div class="contact-container">
+
+            <!-- INFO -->
+            <div class="contact-info">
+                <h3 data-lang="contact_sub">Mettiamoci in contatto</h3>
+                <p data-lang="contact_text">Hai un'idea in mente o hai bisogno di un modello 3D? Scrivimi e trasformiamo la tua visione in realtà.</p>
+
+                <p style="margin-top: 30px;">Email: <strong style="color: #3b82f6;">
+                    <a href="mailto:gabriele.bongiovanni23@gmail.com" style="color: inherit; text-decoration: none;">gabriele.bongiovanni23@gmail.com</a>
+                </strong></p>
+                <p>Location: <strong style="color: #3b82f6;">Milan, Italy (Remote Available)</strong></p>
+
+                <div class="social-links">
+                    <a href="#" class="social-btn" aria-label="Instagram">IG</a>
+                    <a href="#" class="social-btn" aria-label="ArtStation">AS</a>
+                    <a href="#" class="social-btn" aria-label="LinkedIn">IN</a>
+                </div>
+            </div>
+
+            <!-- FORM -->
+            <form class="glass-form" id="contactForm" action="https://formsubmit.co/gabriele.bongiovanni23@gmail.com" method="POST">
+                <div id="formFeedback" class="form-feedback"></div>
+
+                <div class="form-group">
+                    <input type="text" id="formName" name="name" class="form-input" placeholder="Il tuo nome" data-lang="form_name" required>
+                    <div class="form-message"></div>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="formEmail" name="email" class="form-input" placeholder="La tua email" data-lang="form_email" required>
+                    <div class="form-message"></div>
+                </div>
+                <div class="form-group">
+                    <textarea id="formMsg" name="message" class="form-input" placeholder="Parlami di te" data-lang="form_msg" required></textarea>
+                    <div class="form-message"></div>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;" data-lang="btn_send">Invia Messaggio</button>
+            </form>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>&copy; 2026 3D.PRO Portfolio. All rights reserved.</footer>
+    <p class="work-progress" data-lang="work_in_progress">Lavoro in corso</p>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

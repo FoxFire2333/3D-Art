@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Artist | Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/sections.css">
+</head>
+<body>
+
+    <!-- SFONDO ANIMATO -->
+    <div class="bg-blobs">
+        <div class="blob"></div>
+        <div class="blob" style="top: 50%; left: 70%; background: #3b82f6;"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a class="logo" href="index.html">3D.PRO</a>
+
+        <div class="hamburger" id="hamburger">
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+        </div>
+
+        <div class="nav-links" id="nav-links">
+            <a href="index.html" data-lang="nav_home">Home</a>
+            <a href="portfolio.html" class="active" data-lang="nav_portfolio">Portfolio</a>
+            <a href="contact.html" data-lang="nav_contact">Contatti</a>
+        </div>
+
+        <div class="nav-right">
+            <select class="lang-switch" onchange="changeLanguage(this.value)">
+                <option value="it">IT</option>
+                <option value="en">EN</option>
+                <option value="es">ES</option>
+                <option value="fr">FR</option>
+            </select>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="page active" id="works">
+
+        <h2 class="section-title" data-lang="port_title">Ultimi Progetti</h2>
+
+        <div class="portfolio-grid">
+
+            <!-- Progetto 1 -->
+            <div class="project-card" onclick="openLightbox('https://via.placeholder.com/1200x800/1a1a2e/3b82f6?text=Cyberpunk+City')">
+                <img src="https://via.placeholder.com/600x400/1a1a2e/3b82f6?text=Cyberpunk+City" alt="Project 1" class="project-img">
+                <div class="project-info">
+                    <div class="project-title">Cyberpunk City</div>
+                    <div class="project-tags">Blender • Cycles • Photoshop</div>
+                </div>
+            </div>
+
+            <!-- Progetto 2 -->
+            <div class="project-card" onclick="openLightbox('https://via.placeholder.com/1200x800/2e1a2e/a855f7?text=Character+Sculpt')">
+                <img src="https://via.placeholder.com/600x400/2e1a2e/a855f7?text=Character+Sculpt" alt="Project 2" class="project-img">
+                <div class="project-info">
+                    <div class="project-title">Character Design</div>
+                    <div class="project-tags">ZBrush • Substance • UE5</div>
+                </div>
+            </div>
+
+            <!-- Progetto 3 -->
+            <div class="project-card" onclick="openLightbox('https://via.placeholder.com/1200x800/0a2e1a/55f7a8?text=Product+Visualization')">
+                <img src="https://via.placeholder.com/600x400/0a2e1a/55f7a8?text=Product+Visualization" alt="Project 3" class="project-img">
+                <div class="project-info">
+                    <div class="project-title">Luxury Watch</div>
+                    <div class="project-tags">Cinema 4D • Octane</div>
+                </div>
+            </div>
+
+            <!-- Progetto 4 -->
+            <div class="project-card" onclick="openLightbox('https://via.placeholder.com/1200x800/2e2e0a/f7f755?text=Abstract+Art')">
+                <img src="https://via.placeholder.com/600x400/2e2e0a/f7f755?text=Abstract+Art" alt="Project 4" class="project-img">
+                <div class="project-info">
+                    <div class="project-title">Fluid Simulation</div>
+                    <div class="project-tags">Houdini • Redshift</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>&copy; 2026 3D.PRO Portfolio. All rights reserved.</footer>
+    <p class="work-progress" data-lang="work_in_progress">Lavoro in corso</p>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <span class="close-lightbox">&times;</span>
+        <img id="lightbox-img" src="" alt="Full Render">
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
